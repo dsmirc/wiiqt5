@@ -1,0 +1,49 @@
+name: WinBuild
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+    name: build
+    runs-on: windows-latest
+    strategy:
+      matrix:
+        project:
+          [
+            { folder: "breft_editor", target: "breft" },
+            { folder: "nanddump", target: "nand" },
+            { folder: "nandBinCheck", target: "nandBinCheck" },
+            { folder: "nandExtract", target: "nandExtract" },
+            { folder: "ohneschwanzenegger", target: "refleurii" },
+            { folder: "punetwiin", target: "punetween" },
+            { folder: "symbolizer", target: "symbolizer" },
+          ]
+      fail-fast: false
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v2
+        with:
+          version: '5.15.2'
+          arch: 'win64_mingw81'
+          dir: '${{ runner.workspace }}/Qt'
+
+      - name: Build
+        run: |
+          echo "Building project"
+          cd ${{ github.workspace }}
+          qmake
+          mingw32-make
+     
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v4.3.0
+        with:
+          name: build-artifacts-${{ github.run_id }}-${{ github.run_number }}-${{ matrix.project.target }}
+          path: |
+            ${{ matrix.project.folder }}
