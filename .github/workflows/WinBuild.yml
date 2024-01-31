@@ -38,8 +38,8 @@ jobs:
         run: |
           echo "Building project"
           cd ${{ github.workspace }}
-          qmake
-          mingw32-make
+          qmake ${{ matrix.project.target }}.pro
+          mingw32-make -f Makefile
      
       - name: Upload Artifacts
         uses: actions/upload-artifact@v4.3.0
