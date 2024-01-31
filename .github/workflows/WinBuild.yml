@@ -37,7 +37,7 @@ jobs:
       - name: Build
         run: |
           echo "Building project"
-          cd ${{ github.workspace }}
+          cd ${{ matrix.project.folder }}
           qmake ${{ matrix.project.target }}.pro
           mingw32-make -f Makefile
      
