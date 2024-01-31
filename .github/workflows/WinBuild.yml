@@ -32,7 +32,7 @@ jobs:
 
         with:
           version: '5.9.9'
-          arch: 'win32_mingw53'
+          arch: 'win64_msvc2015_64'
           dir: '${{ runner.workspace }}/Qt'
 
       - name: Build
@@ -40,8 +40,7 @@ jobs:
           echo "Building project"
           cd ${{ matrix.project.folder }}
           qmake ${{ matrix.project.target }}.pro
-          mingw32-make -j4
-     
+          nmake -f Makefile     
       - name: Upload Artifacts
         uses: actions/upload-artifact@v4.3.0
         with:
